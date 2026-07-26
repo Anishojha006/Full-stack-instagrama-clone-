@@ -1,0 +1,16 @@
+=> Authentication
+. register (saving data of usrs, generatying and giving jwt token to users, hashing the password of users)
+. login
+. logout (token blacklisting)
+.[OTP based registration]
+
+=>Post
+. create
+. can see the feed
+. like the post (collection types in mongo db)
+. save posts
+
+=>Users
+. followers
+. following
+

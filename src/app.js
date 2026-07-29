@@ -10,6 +10,6 @@ app.use(cookieParser());
 // post method api name /api/auth/register
 app.use("/api/auth",authRouter);
 // route for below is /api/auth/
-app.use("/api/auth",postRouter); 
+app.use("/api/posts",postRouter); 
 
 module.exports = app ;

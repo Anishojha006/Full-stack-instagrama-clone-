@@ -11,24 +11,23 @@ async function createPostController(req,res){
 
 const token = req.cookies.token;
 
+ if(!token){
+    return res.status(404).json({
+      message:"authentication token is missing"
+    })
+  }
 
-if(!token){
-
-  return res.status(401).json({  // 401 status code stands for unauthorize request
-    message:"Token not provided"
-  })
-
-}
+let decoded=null;
 try{
   
-  const decoded = jwt.verify(token,process.env.JWT_SECRET);
+   decoded = jwt.verify(token,process.env.JWT_SECRET);
 }
 catch(err){
-  res.status(401).json({
+  return  res.status(401).json({
     message:"user unauthorized "
 })
 }
-console.log(decoded);
+
 const file_Details = await client.files.upload({
   file: await toFile(Buffer.from(req.file.buffer), 'file'),
   fileName: 'fileName',
@@ -46,4 +45,89 @@ res.status(201).json({
 })
 }
 
-module.exports = {  createPostController };
+async function getPostControllers(req,res){
+  const token = req.cookies.token;
+  if(!token){
+    return res.status(404).json({
+      message:"authentication token is missing"
+    })
+  }
+
+
+  let decoded=null;
+  try{
+
+    decoded = jwt.verify(token,process.env.JWT_SECRET);
+  }
+  catch(err){
+    return res.status(401).json({
+    message:"unauthorized user"
+    })
+  }
+
+  const userId =  decoded.id;
+
+  const  posts =  await postModel.find({
+    user:userId
+  });
+
+  if(!posts){
+
+    return res.status(404).json({
+      message:"no posts exist"
+    });
+
+  }
+
+  res.status(200).json({
+    message:"Posts fetched sucessfully",
+    posts
+  })
+}
+
+async function getPostDetailsController(req,res){
+  const token = req.cookies.token;
+
+  if(!token){
+    return res.status(404).json({
+      message:"authentication token is missing"
+    })
+  }
+
+  let decoded = null;
+  
+  try{
+   decoded = jwt.verify(token,process.env.JWT_SECRET);
+  }
+  catch(err){
+   return  res.status(401).json({
+      message:"unauthorized user"
+    })
+  }
+  const userId = decoded.id;
+  const postId = req.params.postId;
+  const post = await postModel.findById(postId);
+
+  if(!post){
+    return res.status(404).json({
+      message:"Post not found."
+    })
+  }
+ console.log(post)
+  const isValidUser = post.user.toString()  === userId;
+  console.log(post.user.toString());
+  console.log("         ");
+  console.log(userId);
+  if(!isValidUser){
+    return res.status(403).json({   //  403  status ccode represent that the user is authenticated but is not allowed to access the requested resources
+      message:"Forbidden content."
+    })
+  }
+
+  res.status(200).json({
+    message:"post fetched sucessfully",post
+  })
+
+};
+
+module.exports = { createPostController , getPostControllers ,getPostDetailsController };

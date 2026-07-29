@@ -12,5 +12,17 @@ Post  /api/posts  this api will be protected => simply means  only those users w
 
 postRouter.post("/",upload.single('image'),postController.createPostController);
 
+/*
+  /api/posts/  => protected
+**/
+postRouter.get("/",postController.getPostControllers);
+
+/*
+GET /api/posts/details/:postid
+- return an details about specific post with the id. also check whether the post belongs to the user that the request come from 
+**/
+
+postRouter.get("/details/:postId",postController.getPostDetailsController);
+
 
 module.exports = postRouter;

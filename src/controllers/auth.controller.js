@@ -1,5 +1,5 @@
 const userModel = require("../models/user.model.js");
-const crypto = require("crypto");
+const  bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 async  function registerController (req, res){
@@ -17,7 +17,7 @@ async  function registerController (req, res){
             message:  (isuserAlredayExist.email === email ? "Email already exist" : "username already exist")
         });
     }
-    const hashPassword = crypto.createHash("sha256").update(password).digest("hex");
+    const hashPassword = await bcrypt.hash(password,10); // 10 => here tellos number of layers of hashing
     const user = await userModel.create({
         username, email, password: hashPassword, bio, profileImage
     });
@@ -54,9 +54,8 @@ async function loginController(req, res){
         })
     }
 
-    const hashPassword = crypto.createHash("sha256").update(password).digest("hex");
 
-    const CorrectPassword = user.password === hashPassword;
+    const CorrectPassword = await  bcrypt.compare(password,user.password);
     if (!CorrectPassword) {
 
         return res.status(401).json({

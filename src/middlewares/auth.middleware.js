@@ -1,0 +1,27 @@
+const jwt = require("jsonwebtoken");
+
+async function identifyingUser(req, res, next) {
+    const token = req.cookies.token;
+
+    if (!token) {
+        return res.status(404).json({
+            message: "authentication token is missing"
+        })
+    }
+
+    let decoded = null;
+    try {
+
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+    }
+    catch (err) {
+        return res.status(401).json({
+            message: "user unauthorized "
+        })
+    }
+    req.user = decoded;
+    next(); // this is used to forwad request from middleware to controller
+}
+
+module.exports = identifyingUser;

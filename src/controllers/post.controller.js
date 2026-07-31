@@ -1,7 +1,7 @@
 const postModel = require("../models/post.model.js");
 const ImageKit   =  require('@imagekit/nodejs');
 const  {toFile} = require('@imagekit/nodejs');
-const jwt = require("jsonwebtoken");
+
 
 const client = new ImageKit({
       privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
@@ -9,24 +9,7 @@ const client = new ImageKit({
 
 async function createPostController(req,res){
 
-const token = req.cookies.token;
 
- if(!token){
-    return res.status(404).json({
-      message:"authentication token is missing"
-    })
-  }
-
-let decoded=null;
-try{
-  
-   decoded = jwt.verify(token,process.env.JWT_SECRET);
-}
-catch(err){
-  return  res.status(401).json({
-    message:"user unauthorized "
-})
-}
 
 const file_Details = await client.files.upload({
   file: await toFile(Buffer.from(req.file.buffer), 'file'),
@@ -37,7 +20,7 @@ const file_Details = await client.files.upload({
 const post = await postModel.create({
   caption:req.body.caption,
   imgUrl:file_Details.url,
-  user:decoded.id
+  user:req.user.id
 })
 
 res.status(201).json({
@@ -46,26 +29,10 @@ res.status(201).json({
 }
 
 async function getPostControllers(req,res){
-  const token = req.cookies.token;
-  if(!token){
-    return res.status(404).json({
-      message:"authentication token is missing"
-    })
-  }
 
 
-  let decoded=null;
-  try{
 
-    decoded = jwt.verify(token,process.env.JWT_SECRET);
-  }
-  catch(err){
-    return res.status(401).json({
-    message:"unauthorized user"
-    })
-  }
-
-  const userId =  decoded.id;
+  const userId = req.user.id;
 
   const  posts =  await postModel.find({
     user:userId
@@ -86,25 +53,10 @@ async function getPostControllers(req,res){
 }
 
 async function getPostDetailsController(req,res){
-  const token = req.cookies.token;
 
-  if(!token){
-    return res.status(404).json({
-      message:"authentication token is missing"
-    })
-  }
 
-  let decoded = null;
   
-  try{
-   decoded = jwt.verify(token,process.env.JWT_SECRET);
-  }
-  catch(err){
-   return  res.status(401).json({
-      message:"unauthorized user"
-    })
-  }
-  const userId = decoded.id;
+  const userId = req.user.id;
   const postId = req.params.postId;
   const post = await postModel.findById(postId);
 
@@ -115,9 +67,6 @@ async function getPostDetailsController(req,res){
   }
  console.log(post)
   const isValidUser = post.user.toString()  === userId;
-  console.log(post.user.toString());
-  console.log("         ");
-  console.log(userId);
   if(!isValidUser){
     return res.status(403).json({   //  403  status ccode represent that the user is authenticated but is not allowed to access the requested resources
       message:"Forbidden content."

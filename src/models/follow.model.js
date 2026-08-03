@@ -2,14 +2,12 @@ const mongoose = require("mongoose");
 
 const followSchema = new mongoose.Schema({
     follower: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-        required: [true, "Follow is required"]
+        type: String,
+        required:true
     },
     followee: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-        required: [true, "Followee is required"]
+        type: String,
+        required:true
     }
 }, {
     timestamps: true  // this te;ll when this document was created in the database and last time when it wsa updated

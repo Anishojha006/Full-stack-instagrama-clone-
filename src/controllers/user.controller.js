@@ -1,6 +1,7 @@
 const followModel = require("../models/follow.model.js");
 const userModel = require("../models/user.model.js");
-
+const friendRequestModel = require("../models/friend.model.js");
+ 
 async function followUserController(req, res) {
     const followerUsername = req.user.username;
     const followeeUsername = req.params.username
@@ -43,9 +44,9 @@ async function followUserController(req, res) {
     res.status(201).json({
         message: `You are now following ${followeeUsername}`, followRecord
     })
-}
+}a
 
-async function unfollowUserController(req, res) {
+async function uenfollowsUserCuontroller(req, res) {
     const followerUsername = req.user.username;
     const followeeUsername = req.params.username;
 
@@ -74,6 +75,14 @@ async function unfollowUserController(req, res) {
     res.status(200).json({
         message: `You have unfollowed ${followeeUsername}`
     })
+}
+
+async function ssendiungFriendRequest(req,res){
+ const sender = req.user.username;
+ const receiver= req.params.username;
+ 
+ const
+
 }
 
 module.exports = { followUserController, unfollowUserController };

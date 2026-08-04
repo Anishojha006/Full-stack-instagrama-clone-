@@ -7,27 +7,30 @@ const upload = multer({ storage: storage });
 const identifyingUser = require('../middlewares/auth.middleware.js');
 
 
-
-
-
-/*  
-Post  /api/posts  this api will be protected => simply means  only those users which have valid tokn can reques on this api withoout valid token we will send 404 status code unauthorized
+/** 
+@routes Post  /api/posts  
+@Description this api will be protected => simply means  only those users which have valid tokn can reques on this api withoout valid token we will send 404 status code unauthorized
 - req.body = {caption,img-file}
-**/
+*/
 
 postRouter.post("/",upload.single('image'), identifyingUser,postController.createPostController);
 
-/*
-  /api/posts/  => protected
-**/
+/** 
+@route  /api/posts/  
+@description => protected
+*/
 postRouter.get("/",identifyingUser,postController.getPostControllers);
 
-/*
-GET /api/posts/details/:postid
-- return an details about specific post with the id. also check whether the post belongs to the user that the request come from 
-**/
+/** 
+@routes GET /api/posts/details/:postid
+@description- return an details about specific post with the id. also check whether the post belongs to the user that the request come from 
+*/
 
 postRouter.get("/details/:postId",identifyingUser,postController.getPostDetailsController);
-
+/**
+ * @route Post /api/posts/like/:postid
+ * @description like a post with the id provided in the
+ */
+postRouter.post("/like/:postId",identifyingUser,postController.likePostController);
 
 module.exports = postRouter;

@@ -7,12 +7,21 @@ const followSchema = new mongoose.Schema({
     },
     followee: {
         type: String,
-        required:true
-    }
+        required:true,
+    },
+    status:{
+        type:String,
+        default:"pending",
+        enum:{ 
+           values: ["pending","accepted","rejected"],
+           message:"status can only be pending , accepted or rejected"
+        }
+          }
 }, {
     timestamps: true  // this te;ll when this document was created in the database and last time when it wsa updated
 });
 
+followSchema.index({follower:1,folowee:1},{unique:true});
 const followModel = mongoose.model("Follows",followSchema);
 
 module.exports  = followModel;

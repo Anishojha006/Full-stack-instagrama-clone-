@@ -15,7 +15,7 @@ userRouter.post("/follow/:username",identifyingUser,userContrololr.followUserCon
 * @description Follow a user
 * @access Private
   **/
-userRouter.post("/unfollow/:username",identifyingUser,userContrololr.unfollowUserController);
+userRouter.post("/unfollow/:username",identifyingUser,userContrololr.unfollowsUserController);
 
 /**
  * @route POST /api/users/send/friendrequest/:username
@@ -23,6 +23,23 @@ userRouter.post("/unfollow/:username",identifyingUser,userContrololr.unfollowUse
  * @access Private
  */
 
-userRouter.post("/send/frinedrequest/:username",identifyingUser,userContrololr.sendingFriendRequest); 
+userRouter.post("/send/Friendrequest/:username",identifyingUser,userContrololr.sendiungFriendRequestController);
+
+/**
+ * @route GET /api/users/get/request
+ * @description to get all friend request
+ * @access Private
+ */
+
+userRouter.get("/get/request",identifyingUser,userContrololr.GetfriendRequestController);
+
+/**
+ * @route POST /api/users/acceptRequest/requestId
+ * @description to accptan request
+ * @access Private
+ */
+
+userRouter.put("/acceptRequest/:requestId",identifyingUser,userContrololr.AcceptFriendRequestControlloer);
 
 module.exports = userRouter;
+

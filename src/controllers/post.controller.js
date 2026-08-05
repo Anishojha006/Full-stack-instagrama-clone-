@@ -105,7 +105,7 @@ async function likePostController(req,res){
     });
   }
 
-  
+
   const like = await likeModel.create({
     post:postId,
     user:username

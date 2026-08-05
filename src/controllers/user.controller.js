@@ -1,7 +1,7 @@
 const followModel = require("../models/follow.model.js");
 const userModel = require("../models/user.model.js");
 const friendRequestModel = require("../models/friend.model.js");
- 
+
 async function followUserController(req, res) {
     const followerUsername = req.user.username;
     const followeeUsername = req.params.username
@@ -44,9 +44,9 @@ async function followUserController(req, res) {
     res.status(201).json({
         message: `You are now following ${followeeUsername}`, followRecord
     })
-}a
+}
 
-async function uenfollowsUserCuontroller(req, res) {
+async function unfollowsUserController(req, res) {
     const followerUsername = req.user.username;
     const followeeUsername = req.params.username;
 
@@ -55,7 +55,7 @@ async function uenfollowsUserCuontroller(req, res) {
     });
 
     if (!isFolloweeExist) {
-     return    res.status(404).json({
+        return res.status(404).json({
             message: `This followee does not exist`
         })
     }
@@ -77,12 +77,94 @@ async function uenfollowsUserCuontroller(req, res) {
     })
 }
 
-async function ssendiungFriendRequest(req,res){
- const sender = req.user.username;
- const receiver= req.params.username;
- 
- const
+async function sendiungFriendRequestController(req, res) {
+
+    const sender = req.user.username;
+    const receiver = req.params.username;
+    console.log(sender + "  " + receiver);
+    const RecevierExist = await userModel.findOne({
+        username: receiver
+    })
+
+
+    if (!RecevierExist) {
+        return res.status(404).json({
+            message: `${receiver} username does not exist`
+        })
+    }
+
+    const alreadyFriend = await friendRequestModel.findOne({
+        sender: sender,
+        receiver: receiver
+    })
+
+    if (alreadyFriend) {
+        return res.status(401).json({
+            message: `${sender} have send friend  request to  ${receiver} and he have put the request on ${alreadyFriend.Status} `
+        })
+    }
+
+    const Friends = await friendRequestModel.create({
+        sender: sender,
+        receiver: receiver,
+    })
+
+    res.status(201).json({
+        message: `Friend request send sucessfully `
+    })
 
 }
 
-module.exports = { followUserController, unfollowUserController };
+async function GetfriendRequestController(req, res) {
+    const username = req.user.username;
+    const allFriendRequest = await friendRequestModel.find({
+        receiver: `${username}`,
+        Status: "pending"
+    })
+
+    if (!allFriendRequest) {
+        return res.status(200).json({
+            message: "No friend current  request"
+        })
+    }
+
+    res.status(200).json({
+        message: "Sucessfully fetched all friend request", allFriendRequest
+    })
+
+}
+
+async function AcceptFriendRequestControlloer(req, res) {
+    const username = req.user.username;
+    const friendRequestId = req.params.requestId;
+
+    const isRequestIdExist = await friendRequestModel.findOne({
+        _id: friendRequestId,
+        receiver: username
+    })
+    console.log(isRequestIdExist);
+
+    if (!isRequestIdExist) {
+        return res.status(404).json({
+            message: "This request does not exist"
+        });
+    }
+
+    if (!(isRequestIdExist.Status === "pending")) {
+        return res.status(200).json({
+            message: `${isRequestIdExist.sender}'s request is ${isRequestIdExist.Status}`, isRequestIdExist
+        })
+    }
+
+    const AcceptedRequest = await friendRequestModel.findByIdAndUpdate(
+        friendRequestId, { Status: "accepted" }
+    )
+
+    res.status(201).json({
+        message: `${AcceptedRequest.sender} friend request accepted`, AcceptedRequest
+    })
+
+}
+
+
+module.exports = { followUserController, unfollowsUserController, sendiungFriendRequestController, GetfriendRequestController, AcceptFriendRequestControlloer };

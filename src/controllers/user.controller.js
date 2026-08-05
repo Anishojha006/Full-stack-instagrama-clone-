@@ -137,7 +137,6 @@ async function GetfriendRequestController(req, res) {
 async function AcceptFriendRequestControlloer(req, res) {
     const username = req.user.username;
     const friendRequestId = req.params.requestId;
-
     const isRequestIdExist = await friendRequestModel.findOne({
         _id: friendRequestId,
         receiver: username
@@ -166,5 +165,35 @@ async function AcceptFriendRequestControlloer(req, res) {
 
 }
 
+async function RejectFriendRequestController(req, res) {
+    const username = req.user.username;
+    const friendRequestId = req.params.requestId;
 
-module.exports = { followUserController, unfollowsUserController, sendiungFriendRequestController, GetfriendRequestController, AcceptFriendRequestControlloer };
+    const isRequestIdExist = await friendRequestModel.findOne({
+        _id: friendRequestId,
+        receiver: username
+    });
+
+    if (!isRequestIdExist) {
+        return res.status(404).json({
+            message: "This request does not exist"
+        });
+    }
+    const isRequestAlreadyRejected = isRequestIdExist.status === "rejected";
+    if (isRequestAlreadyRejected) {
+        return res.status(200).json({
+            message: "request already rejected"
+        })
+    }
+    const RejectedRequest = await friendRequestModel.findByIdAndUpdate(
+        friendRequestId, { Status: "rejected" }
+    )
+
+    res.status(201).json({
+        message: `${RejectedRequest.sender} friend request rejected`, RejectedRequest
+    })
+
+}
+
+
+module.exports = { followUserController, unfollowsUserController, sendiungFriendRequestController, GetfriendRequestController, AcceptFriendRequestControlloer, RejectFriendRequestController };

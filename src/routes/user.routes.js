@@ -34,12 +34,22 @@ userRouter.post("/send/Friendrequest/:username",identifyingUser,userContrololr.s
 userRouter.get("/get/request",identifyingUser,userContrololr.GetfriendRequestController);
 
 /**
- * @route POST /api/users/acceptRequest/requestId
- * @description to accptan request
+ * @route PUT /api/users/acceptRequest/requestId
+ * @description to accept request
  * @access Private
  */
 
 userRouter.put("/acceptRequest/:requestId",identifyingUser,userContrololr.AcceptFriendRequestControlloer);
+
+/**
+ * @route PUT api/users/rejectRequest/requestId
+ * @descrription to reject an friend request by an receiver
+ * @access Private
+ */
+
+userRouter.put("/rejectRequest/:requestId",identifyingUser,userContrololr.RejectFriendRequestController);
+
+
 
 module.exports = userRouter;
 

@@ -9,7 +9,7 @@ const followSchema = new mongoose.Schema({
         type: String,
         required:true,
     },
-    status:{
+    Status:{
         type:String,
         default:"pending",
         enum:{ 

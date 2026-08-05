@@ -17,13 +17,6 @@ userRouter.post("/follow/:username",identifyingUser,userContrololr.followUserCon
   **/
 userRouter.post("/unfollow/:username",identifyingUser,userContrololr.unfollowsUserController);
 
-/**
- * @route POST /api/users/send/friendrequest/:username
- * @description To send friend request
- * @access Private
- */
-
-userRouter.post("/send/Friendrequest/:username",identifyingUser,userContrololr.sendiungFriendRequestController);
 
 /**
  * @route GET /api/users/get/request

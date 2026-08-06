@@ -1,11 +1,16 @@
 const express = require("express");
 const app = express(); // creating an instance of an server 
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({
+    credentials:true,
+    origin:"http://localhost:5173"
+})); 
 
 /*require routes **/
 const postRouter = require("../src/routes/post.routes.js");

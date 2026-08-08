@@ -7,7 +7,7 @@ function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/"element={<h1>This is default route</h1>} />
+        <Route path="/"element={<h1>Welcome to the application</h1>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/register' element={<Register/>} />
       </Routes>

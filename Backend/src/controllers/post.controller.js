@@ -118,11 +118,25 @@ async function likePostController(req, res) {
 }
 
 async function getFeedcontroller(req, res) {
-  const allPosts = await postModel.find().populate("user");
+  const user = req.user
+  const allPosts = await Promise.all((await postModel.find().populate("user").lean())
+  .map(async (post)=>{
+
+    /**
+     * typeof is an mongoose object and we cannot add any new property so we need to convert it to an normal object to do so we use lean() function .
+     */
+    const isLiked = await likeModel.findOne({
+      user:user.username,
+      post:post._id
+    })
+     post.isLiked = Boolean(isLiked);
+
+     return post
+  }))
 
   res.status(200).json({
-    message: "posts fetched sucessfully .",
-    allPosts
+    message: "posts fetched successfully.",
+    posts: allPosts
   })
 }
 

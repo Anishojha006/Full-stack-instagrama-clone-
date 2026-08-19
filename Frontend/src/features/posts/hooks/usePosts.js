@@ -1,4 +1,4 @@
-import { getFeed , createPost} from "../services/post.spi";
+import { getFeed , createPost ,likePost , unlikePost} from "../services/post.api";
 import { useContext, useEffect } from "react";
 import { postContext } from "../post.context";
 
@@ -26,9 +26,32 @@ export const usePosts = () => {
         const data = await createPost(postImage,caption);
         setFeed([data.post, ...feed])
         setloading(false);
+    };
+
+    const handlelike = async (postId)=>{
+        try {
+            setloading(true);
+            const response = await likePost(postId);
+            setloading(false);
+        } catch (error) {
+            setloading(false);
+            console.error("Error liking post:", error.response?.data?.message || error.message);
+        }
     }
+
+    const handleunlike = async (postId)=>{
+        try {
+            setloading(true);
+            const response = await unlikePost(postId);
+            setloading(false);
+        } catch (error) {
+            setloading(false);
+            console.error("Error unliking post:", error.response?.data?.message || error.message);
+        }
+    }
+
     useEffect(()=>{
     handleGetFeed();
     },[])
-    return { loading, feed, post, setPost, handleGetFeed , handlecreatePost };
+    return { loading, feed, post, setPost, handleGetFeed , handlecreatePost ,handlelike,handleunlike};
 };

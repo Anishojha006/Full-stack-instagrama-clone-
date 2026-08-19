@@ -1,15 +1,11 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import "../style/feed.scss"
 import Post from '../componenets/Post'
 import { usePosts } from '../hooks/usePosts.js'
 import Navbar from '../../shared/componenet/Navbar.jsx'
 
 const Feed = () => {
-    const { feed, handleGetFeed, loading } = usePosts();
-
-    useEffect( () => {
-        handleGetFeed();
-    }, []);
+    const { feed, loading } = usePosts();
 
     if (loading || !feed) {
         return (

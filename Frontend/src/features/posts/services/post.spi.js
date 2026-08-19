@@ -10,10 +10,12 @@ export async function getFeed() {
     return response.data;
 }
 
-export async function createPost() {
-    const response = await api.post("/api/posts", {
-        imgUrl: imgUrl,
-        caption: caption
-    });
+export async function createPost(postImage, caption) {
+
+    /**  when sending an file from frontend to the backend we use the following method */
+    const formData = new FormData();
+    formData.append("image", postImage);
+    formData.append("caption", caption)
+    const response = await api.post("/posts", formData);
     return response.data
 }

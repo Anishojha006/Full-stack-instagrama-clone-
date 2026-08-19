@@ -1,9 +1,11 @@
-import { getFeed } from "../services/post.spi";
-import { useContext } from "react";
+import { getFeed , createPost} from "../services/post.spi";
+import { useContext, useEffect } from "react";
 import { postContext } from "../post.context";
 
 export const usePosts = () => {
+
     const context = useContext(postContext);
+    
 
     if (!context) {
         throw new Error("usePosts must be used inside a postContextProvider");
@@ -18,6 +20,15 @@ export const usePosts = () => {
         setFeed(posts);
         setloading(false);
     };
-
-    return { loading, feed, post, setPost, handleGetFeed };
+    
+    const handlecreatePost = async (postImage,caption ) =>{
+        setloading(true);
+        const data = await createPost(postImage,caption);
+        setFeed([data.post, ...feed])
+        setloading(false);
+    }
+    useEffect(()=>{
+    handleGetFeed();
+    },[])
+    return { loading, feed, post, setPost, handleGetFeed , handlecreatePost };
 };

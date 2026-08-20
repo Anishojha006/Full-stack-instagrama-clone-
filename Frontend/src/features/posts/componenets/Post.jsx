@@ -1,7 +1,4 @@
 import React from 'react';
-// import { usePosts } from '../hooks/usePosts';
-
-
 
 const Post = ({ user, post, handlelike, handleunlike }) => {
 

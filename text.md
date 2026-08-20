@@ -12,3 +12,5 @@ Below is the four layer architecture of React(frontend)
     =>error
 => Api
    =>to communicate with backend    
+
+   8/20/26 task create followe following and other user UI and also craete UI for saving post and also carete there backend 

@@ -29,7 +29,8 @@ const Feed = () => {
                     {feed.length > 0 ? (
                         feed.map((postItem) => (
                             <Post
-                            props={{ user, post, handlelike, handleunlike }}
+                            handlelike={  handlelike }
+                             handleunlike ={ handleunlike}
                                 key={postItem._id || postItem.id}
                                 user={postItem.user}
                                 post={postItem}

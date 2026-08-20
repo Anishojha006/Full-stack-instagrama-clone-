@@ -5,12 +5,18 @@ import { usePosts } from '../hooks/usePosts.js'
 import Navbar from '../../shared/componenet/Navbar.jsx'
 
 const Feed = () => {
-    const { feed, loading } = usePosts();
+    const {  
+        user,
+        post,  
+        feed,
+    loading,
+    handlelike,
+    handleunlike } = usePosts();
 
-    if (loading || !feed) {
+    if (loading ) {
         return (
             <main>
-                <h1>Feed is loading ...</h1>
+                <h1>Feed is loading </h1>
             </main>
         );
     }
@@ -23,6 +29,7 @@ const Feed = () => {
                     {feed.length > 0 ? (
                         feed.map((postItem) => (
                             <Post
+                            props={{ user, post, handlelike, handleunlike }}
                                 key={postItem._id || postItem.id}
                                 user={postItem.user}
                                 post={postItem}

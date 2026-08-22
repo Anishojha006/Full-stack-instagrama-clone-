@@ -32,9 +32,26 @@ export const useAuth = () => {
             throw err;
         }
     }
+    
+    const handlegetme = async()=>{
+        setloading(true);
+        try{
 
+            const response = await getme();
+            // if(response)
+            setuser(response.user);
+            return response;
+        }
+        catch(err){
+            alert(err.message);
+            console.log(err.message);
+        }
+        finally{
+            setloading(false);
+        }
+    }
     return {
-        user, loading, handlelogin, handleregister
+        user, loading, handlelogin, handleregister,handlegetme
     }
 
 }

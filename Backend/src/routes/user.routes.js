@@ -1,5 +1,5 @@
 const express = require("express");
-const userContrololr = require("../controllers/user.controller.js")
+const userContrololr = require("../controllers/user.controller.js");
 const identifyingUser = require("../middlewares/auth.middleware.js");
 
 const userRouter = express.Router();
@@ -12,7 +12,7 @@ userRouter.post("/follow/:username",identifyingUser,userContrololr.followUserCon
 
 /** 
 * @route POST  /api/users/unfollow/:username
-* @description Follow a user
+* @description unfollow a user
 * @access Private
   **/
 userRouter.post("/unfollow/:username",identifyingUser,userContrololr.unfollowsUserController);
@@ -42,7 +42,13 @@ userRouter.put("/acceptRequest/:requestId",identifyingUser,userContrololr.Accept
 
 userRouter.put("/rejectRequest/:requestId",identifyingUser,userContrololr.RejectFriendRequestController);
 
+/**
+ * @route GET api/getfolloers
+ * @description to retive all the follwers
+ * @acess Private
+ */
 
+userRouter.get("/getfollower",identifyingUser,userContrololr.getfollower);
 
 module.exports = userRouter;
 

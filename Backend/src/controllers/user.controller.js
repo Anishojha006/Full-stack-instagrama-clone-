@@ -157,5 +157,26 @@ async function RejectFriendRequestController(req, res) {
 
 }
 
+async function getfollower(req,res){
+    const username = req.user.username;
+    const followers = await followModel.find({
+         followee: username,
+        
+    })
+    
+    if(followers.length<1){
+        return res.status(200).json({
+            message:"no followers"
+        })
+    }
+    const response = followers.filter((follower)=>{
+    return follower.Status  === "accepted"; 
+})
+    return res.status(200).json({
+        message:"List of all followers",
+        response
+    })
+}
 
-module.exports = { followUserController, unfollowsUserController, GetfriendRequestController, AcceptFriendRequestControlloer, RejectFriendRequestController };
+
+module.exports = { followUserController, unfollowsUserController, GetfriendRequestController, AcceptFriendRequestControlloer, RejectFriendRequestController,getfollower};

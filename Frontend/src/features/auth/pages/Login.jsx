@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import "../style/form.scss";
 import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 
 
-
-
 const Login = () => {
-  const { user, loading, handlelogin } = useAuth();
+  const { handlegetme, loading, handlelogin } = useAuth();
   const [email, setemail] = useState("");
-  const [password, setpassword] = useState("")
+  const [password, setpassword] = useState("");
   const navigate = useNavigate();
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+
     try {
 
       const response = await handlelogin(email, password);
@@ -32,12 +33,13 @@ const Login = () => {
   }
   if (loading) {
     return <main>
-      <h1>Loading ...</h1>
+      <h1>Loading data ...</h1>
     </main>
   }
   return (
     <main>
       <div className="form-container">
+        <h1>{loading}</h1>
         <h1>Login</h1>
         <form onSubmit={handleSubmit}>
           <input

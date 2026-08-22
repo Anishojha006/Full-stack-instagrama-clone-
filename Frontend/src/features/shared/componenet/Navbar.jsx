@@ -5,7 +5,6 @@ import { useAuth } from '../../auth/hooks/useAuth'
 const Navbar = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  console.log(user+"shree khasi nath ojha shree Aklu Ojha Shree karere ojha")
 
   return (
     <nav className='navbar'>
@@ -17,7 +16,11 @@ const Navbar = () => {
           <img  src="https://ik.imagekit.io/workingwithimages/insta-clone/profile%20image.avif?updatedAt=1786933902071" />
           </div>
           <h3>{user.username}</h3>
-          <button className='button primary-button'>Open Profile</button>
+          <button className='button primary-button'
+          onClick={()=>{
+            navigate("/profile");
+          }}
+          >Open Profile</button>
         </div>
       </div>
       <button

@@ -3,7 +3,7 @@ import Login from './features/auth/pages/Login';
 import Register from './features/auth/pages/Register';
 import Feed from './features/posts/pages/Feed';
 import CreatePost from './features/posts/pages/CreatePost';
-import Profile from './features/auth/pages/Profile';
+import Profile from './features/profile/pages/Profile';
 
 export  const router = createBrowserRouter([
     {

@@ -6,6 +6,5 @@ const api = axios.create({
 
 export async function getFollowers() {
 const response = await api.get("/users/getfollower");
-return response;
- return ;    
+return response.response;
 }

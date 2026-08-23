@@ -9,6 +9,13 @@ const Userinfo = () => {
         </div>
         <h1>Anish Ojha</h1>
     </div>
+    <div className="details">
+        <h3>Email : <span>Dummy@dummygmail.com</span>an </h3>
+        <div className="follower-following-number">
+            <h3>Followers : <span>15</span></h3>
+              <h3>Followings : <span>15</span></h3>
+        </div>
+    </div>
    </div>
   )
 }

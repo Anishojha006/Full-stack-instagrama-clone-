@@ -4,7 +4,6 @@ const followSchema = new mongoose.Schema({
     follower: {
         type: String,
         required:true,
-        unique:true
 
     },
     followee: {
@@ -23,6 +22,9 @@ const followSchema = new mongoose.Schema({
     timestamps: true  // this te;ll when this document was created in the database and last time when it wsa updated
 });
 
+followSchema.index(
+    { follower: 1, followee: 1 },{unique:true}
+);
 
 const followModel = mongoose.model("Follows",followSchema);
 

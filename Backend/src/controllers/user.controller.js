@@ -5,10 +5,12 @@ async function followUserController(req, res) {
     const followerUsername = req.user.username;
     const followeeUsername = req.params.username
     console.log(followerUsername, followeeUsername);
-
-    if (followerUsername === followeeUsername) {
-
-        return res.status(401).json({
+    try{
+        
+        if (followerUsername === followeeUsername) {
+            
+            return res.status(401).json({
+                
             message: "You cannot follow yourself"
         })
     }
@@ -18,14 +20,14 @@ async function followUserController(req, res) {
         follower: followerUsername,
         followee: followeeUsername
     })
-
+    
     if (isAlreadyFollowing) {
-
+        
         return res.status(422).json({
             message: `You are already folowing ${followeeUsername}`, isAlreadyFollowing
         })
     }
-
+    
     const followeeExist = await userModel.findOne({
         username: followeeUsername
     })
@@ -39,10 +41,14 @@ async function followUserController(req, res) {
         follower: followerUsername,
         followee: followeeUsername
     });
-
+    
     res.status(201).json({
         message: `You are now following ${followeeUsername}`, followRecord
     })
+}
+catch(err){
+    console.log(err.message);
+}
 }
 
 async function unfollowsUserController(req, res) {

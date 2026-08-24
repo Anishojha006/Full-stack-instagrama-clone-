@@ -3,6 +3,7 @@ import '../style/profile.scss'
 import Followers from '../compoenets/Followers'
 import Followings from '../compoenets/Followings'
 import Userinfo from '../compoenets/Userinfo'
+import Newrequest from '../compoenets/Newrequest'
 const Profile = () => {
     return (
         <>
@@ -10,8 +11,9 @@ const Profile = () => {
         <div className="follower-following-list">
             <Followers />
             <Followings/>
-            <div className="others"></div>
         </div>
+        <Newrequest/>
+            <div className="others"></div>
         </>
     )
 }

@@ -6,10 +6,10 @@ const api = axios.create({
 
 export async function getFollowers() {
 const response = await api.get("/getfollower");
-return response.response;
+return response.data.response ?? [];
 }
 
 export async function getNewrequest(){
     const response = await api.get("/get/request");
-    return response.allFriendRequest;
+    return response.data.allFriendRequest ?? [];
 }

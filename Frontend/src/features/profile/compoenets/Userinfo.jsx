@@ -1,7 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {useAuth} from '../../auth/hooks/useAuth.js'
-const Userinfo = () => {
-    const {user} = useAuth();
+const Userinfo =  () => {
+    const {loading,user} = useAuth();
+
+   
+    if(loading){
+        return  <main>
+        <h1>Loading . . .</h1>
+        </main>
+    }
   return (
    <div className='user-info'>
     <div className="img-name">

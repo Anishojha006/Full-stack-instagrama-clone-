@@ -28,16 +28,16 @@ const Profile = () => {
                 <Followers />
                 <Followings />
             </div>
-  <div className="request-parent">
-    <h1>New follow request</h1>
-       <div className="requests-conatiner">
-            <Newrequest
-                loading={loading}
-                requests={requests}
-            />
-        </div> 
+            <div className="request-parent">
+                <h1>New follow request</h1>
+                <div className="requests-conatiner">
+                    <Newrequest
+                        loading={loading}
+                        requests={requests}
+                    />
+                </div>
 
-  </div>
+            </div>
 
             <div className="others"></div>
         </>

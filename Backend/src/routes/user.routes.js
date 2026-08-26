@@ -49,6 +49,12 @@ userRouter.put("/rejectRequest/:requestId",identifyingUser,userContrololr.Reject
  */
 
 userRouter.get("/getfollower",identifyingUser,userContrololr.getfollower);
+/**
+ * @route GET
+ * @description used to get the details of the user with the help of it's username
+ * @access private
+ */
+userRouter.get("/getDetails/:username",identifyingUser,userContrololr.getProfileImagefromUsername);
 
 module.exports = userRouter;
 

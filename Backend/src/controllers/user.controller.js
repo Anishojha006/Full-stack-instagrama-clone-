@@ -5,50 +5,50 @@ async function followUserController(req, res) {
     const followerUsername = req.user.username;
     const followeeUsername = req.params.username
     console.log(followerUsername, followeeUsername);
-    try{
-        
+    try {
+
         if (followerUsername === followeeUsername) {
-            
+
             return res.status(401).json({
-                
-            message: "You cannot follow yourself"
-        })
-    }
+
+                message: "You cannot follow yourself"
+            })
+        }
 
 
-    const isAlreadyFollowing = await followModel.findOne({
-        follower: followerUsername,
-        followee: followeeUsername
-    })
-    
-    if (isAlreadyFollowing) {
-        
-        return res.status(422).json({
-            message: `You are already folowing ${followeeUsername}`, isAlreadyFollowing
+        const isAlreadyFollowing = await followModel.findOne({
+            follower: followerUsername,
+            followee: followeeUsername
+        })
+
+        if (isAlreadyFollowing) {
+
+            return res.status(422).json({
+                message: `You are already folowing ${followeeUsername}`, isAlreadyFollowing
+            })
+        }
+
+        const followeeExist = await userModel.findOne({
+            username: followeeUsername
+        })
+        console.log(followeeExist);
+        if (!followeeExist) {
+            return res.status(404).json({
+                message: "The user you want to follow does not exist"
+            })
+        }
+        const followRecord = await followModel.create({
+            follower: followerUsername,
+            followee: followeeUsername
+        });
+
+        res.status(201).json({
+            message: `You are now following ${followeeUsername}`, followRecord
         })
     }
-    
-    const followeeExist = await userModel.findOne({
-        username: followeeUsername
-    })
-    console.log(followeeExist);
-    if (!followeeExist) {
-        return res.status(404).json({
-            message: "The user you want to follow does not exist"
-        })
+    catch (err) {
+        console.log(err.message);
     }
-    const followRecord = await followModel.create({
-        follower: followerUsername,
-        followee: followeeUsername
-    });
-    
-    res.status(201).json({
-        message: `You are now following ${followeeUsername}`, followRecord
-    })
-}
-catch(err){
-    console.log(err.message);
-}
 }
 
 async function unfollowsUserController(req, res) {
@@ -150,7 +150,7 @@ async function RejectFriendRequestController(req, res) {
     const isRequestAlreadyRejected = isRequestIdExist.Status === "rejected";
     if (isRequestAlreadyRejected) {
         return res.status(200).json({
-            message: "request already rejected",isRequestAlreadyRejected
+            message: "request already rejected", isRequestAlreadyRejected
         })
     }
     const RejectedRequest = await followModel.findByIdAndUpdate(
@@ -158,31 +158,52 @@ async function RejectFriendRequestController(req, res) {
     )
 
     res.status(201).json({
-        message: `${RejectedRequest.follower} friend request rejected`,RejectedRequest
+        message: `${RejectedRequest.follower} friend request rejected`, RejectedRequest
     })
 
 }
 
-async function getfollower(req,res){
+async function getfollower(req, res) {
     const username = req.user.username;
     const followers = await followModel.find({
-         followee: username,
-        
+        followee: username,
+
     })
-    
-    if(followers.length<1){
+
+    if (followers.length < 1) {
         return res.status(200).json({
-            message:"no followers"
+            message: "no followers"
         })
     }
-    const response = followers.filter((follower)=>{
-    return follower.Status  === "accepted"; 
-})
+    const response = followers.filter((follower) => {
+        return follower.Status === "accepted";
+    })
     return res.status(200).json({
-        message:"List of all followers",
+        message: "List of all followers",
         response
     })
 }
 
+async function getProfileImagefromUsername(req, res) {
+    try {
 
-module.exports = { followUserController, unfollowsUserController, GetfriendRequestController, AcceptFriendRequestControlloer, RejectFriendRequestController,getfollower};
+        const user = req.params.username;
+        const details = await userModel.findOne({
+            username: user
+        })
+
+
+        return res.status(200).json({
+            message: `${user} details fetched sucessfully`,
+            details: details
+        })
+    }
+    catch (err) {
+        console.log(err.message);
+    }
+
+
+}
+
+
+module.exports = { followUserController, unfollowsUserController, GetfriendRequestController, AcceptFriendRequestControlloer, RejectFriendRequestController, getfollower,getProfileImagefromUsername };

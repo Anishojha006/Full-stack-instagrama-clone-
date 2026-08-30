@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { profileContext } from "../profile.context.jsx";
-import { getNewrequest, getFollowers } from "../services/profile.api.js";
+import { getNewrequest, getFollowers, getusernameDeatilsfromusername } from "../services/profile.api.js";
 
 export const useProfile = () => {
     const context = useContext(profileContext);
@@ -32,7 +32,19 @@ export const useProfile = () => {
         }
     };
 
+    const profileImagefromusername = async (username) => {
+        try {
+            setLoading(true);
+            const response = await getusernameDeatilsfromusername(username);
+            setLoading(false);
+            return response;
+        }
+        catch (err) {
+            console.log(err.message);
+        }
+    }
     return {
+        profileImagefromusername,
         handleNewRequest,
         loading,
         requests

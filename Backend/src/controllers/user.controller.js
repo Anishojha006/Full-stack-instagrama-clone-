@@ -189,7 +189,7 @@ async function getProfileImagefromUsername(req, res) {
 
         const user = req.params.username;
         const details = await userModel.findOne({
-            username: user
+             username:user
         })
 
 

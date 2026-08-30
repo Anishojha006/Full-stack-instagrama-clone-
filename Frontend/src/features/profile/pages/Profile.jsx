@@ -11,6 +11,7 @@ import { useProfile } from "../hooks/useProfile.js";
 
 const Profile = () => {
     const {
+        profileImagefromusername,
         handleNewRequest,
         loading,
         requests
@@ -32,6 +33,7 @@ const Profile = () => {
                 <h1>New follow request</h1>
                 <div className="requests-conatiner">
                     <Newrequest
+                    profileImagefromusername={profileImagefromusername}
                         loading={loading}
                         requests={requests}
                     />

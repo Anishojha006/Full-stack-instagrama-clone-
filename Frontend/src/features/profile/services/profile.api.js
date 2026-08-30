@@ -13,3 +13,8 @@ export async function getNewrequest(){
     const response = await api.get("/get/request");
     return response.data.allFriendRequest ?? [];
 }
+
+export async function getusernameDeatilsfromusername(username) {
+    const response = await api.get(`/getDetails/:${username}`);
+    return response.details.profileImage;
+}

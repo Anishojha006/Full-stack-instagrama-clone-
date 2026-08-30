@@ -1,6 +1,6 @@
 import React from "react";
 
-const Newrequest = ({ loading, requests }) => {
+const Newrequest = ({ loading, requests ,profileImagefromusername}) => {
     console.log("Printing requests", requests);
 
     if (loading) {
@@ -10,6 +10,10 @@ const Newrequest = ({ loading, requests }) => {
             </main>
         );
     }
+    const getImg = async(username)=>{
+       let data = await profileImagefromusername(username);
+        return data;
+    }
 
     return (
         <>
@@ -17,7 +21,7 @@ const Newrequest = ({ loading, requests }) => {
                 <div className="request" key={request._id}>
                     <div className="img-wrapper">
                         <img
-                            src={request.profileImage}
+                            src={getImg(request.follower)}
                           
                         />
                     </div>

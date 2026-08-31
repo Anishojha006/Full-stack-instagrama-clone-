@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react'
-import {useAuth} from '../../auth/hooks/useAuth.js'
-const Userinfo =  () => {
-    const {loading,user} = useAuth();
-
+const Userinfo =  ({handlegetme,user}) => {
    
-    if(loading){
-        return  <main>
-        <h1>Loading . . .</h1>
-        </main>
+    const handlegetmefunction = async ()=>{
+        const data = await handlegetme();
+        console.log("user is"+data)
+        return data;
     }
+
   return (
    <div className='user-info'>
     <div className="img-name">

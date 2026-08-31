@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { use, useEffect } from "react";
 
 import "../style/profile.scss";
 
@@ -6,16 +6,17 @@ import Followers from "../compoenets/Followers";
 import Followings from "../compoenets/Followings";
 import Userinfo from "../compoenets/Userinfo";
 import Newrequest from "../compoenets/Newrequest";
-
 import { useProfile } from "../hooks/useProfile.js";
+import { useAuth } from "../../auth/hooks/useAuth.js";
 
 const Profile = () => {
     const {
-        profileImagefromusername,
         handleNewRequest,
         loading,
         requests
     } = useProfile();
+
+    const {   user,handlegetme } = useAuth();
 
     useEffect(() => {
         handleNewRequest();
@@ -23,7 +24,7 @@ const Profile = () => {
 
     return (
         <>
-            <Userinfo />
+            <Userinfo handlegetme={handlegetme} user={user} />
 
             <div className="follower-following-list">
                 <Followers />
@@ -34,7 +35,7 @@ const Profile = () => {
                 <div className="requests-conatiner">
                     <Newrequest
                     profileImagefromusername={profileImagefromusername}
-                        loading={loading}
+                        
                         requests={requests}
                     />
                 </div>

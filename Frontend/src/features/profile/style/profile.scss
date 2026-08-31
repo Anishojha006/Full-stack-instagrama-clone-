@@ -140,10 +140,11 @@
     justify-content: space-between;
     border-radius: 2vw;
     background-color: rgba(38, 38, 219, 0.79);
-    .img-warapper{
+    .img-wrapper{
       width: 10vw;
       height: 10vw;
       border-radius: 50%;
+      overflow: hidden;
 
       img{
         width: 100%;

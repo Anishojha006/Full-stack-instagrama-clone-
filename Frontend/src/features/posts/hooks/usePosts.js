@@ -133,7 +133,12 @@ export const usePosts = () => {
 
         }
     };
-
+    
+    const handlegetcurrentuser = async ()=>{
+    setloading(true);
+    let userdata  = await getcurrentUser();
+     
+    }
 
     useEffect(() => {
         handleGetFeed();

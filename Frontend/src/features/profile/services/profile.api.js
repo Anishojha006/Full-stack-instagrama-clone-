@@ -15,6 +15,7 @@ export async function getNewrequest(){
 }
 
 export async function getusernameDeatilsfromusername(username) {
-    const response = await api.get(`/getDetails/:${username}`);
-    return response.details.profileImage;
+    const response = await api.get(`/getDetails/${username}`);
+
+    return response.data.details.profileImage;
 }

@@ -1,37 +1,89 @@
-import React from 'react'
-import '../nav.scss'
-import { useNavigate } from 'react-router'
-import { useAuth } from '../../auth/hooks/useAuth'
+import React from "react";
+import "../nav.scss";
+import { useNavigate } from "react-router";
+import { useAuth } from "../../auth/hooks/useAuth";
+
+
 const Navbar = () => {
-  const navigate = useNavigate();
-  const { user } = useAuth();
 
-  return (
-    <nav className='navbar'>
-      <div className="profile">
-        <p>Insta</p>
-        <div className="profile-details-features">
-          <div className='profile-img-wrapper'>
+    const navigate = useNavigate();
 
-          <img  src="https://ik.imagekit.io/workingwithimages/insta-clone/profile%20image.avif?updatedAt=1786933902071" />
-          </div>
-          <h3>{user.username}</h3>
-          <button className='button primary-button'
-          onClick={()=>{
-            navigate("/profile");
-          }}
-          >Open Profile</button>
-        </div>
-      </div>
-      <button
-        onClick={
-          () => {
-            navigate('/create-post')
-          }
-        }
-        className='button primary-button'>new post</button>
-    </nav>
-  )
-}
+    const {
+        user,
+        loading
+    } = useAuth();
 
-export default Navbar
+
+    if (loading) {
+
+        return (
+            <nav className="navbar">
+                <p>Loading...</p>
+            </nav>
+        );
+
+    }
+
+
+    if (!user) {
+        return null;
+    }
+
+
+    return (
+
+        <nav className="navbar">
+
+            <div className="profile">
+
+                <p>Insta</p>
+
+
+                <div className="profile-details-features">
+
+                    <div className="profile-img-wrapper">
+
+                        <img
+                            src={user.profileImage}
+                            alt="profile"
+                        />
+
+                    </div>
+
+
+                    <h3>
+                        {user.username}
+                    </h3>
+
+
+                    <button
+                        className="button primary-button"
+                        onClick={() => {
+                            navigate("/profile");
+                        }}
+                    >
+                        Open Profile
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <button
+                onClick={() => {
+                    navigate("/create-post");
+                }}
+                className="button primary-button"
+            >
+                New Post
+            </button>
+
+        </nav>
+
+    );
+
+};
+
+
+export default Navbar;

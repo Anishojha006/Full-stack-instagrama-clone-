@@ -5,20 +5,25 @@ import { useAuth } from '../hooks/useAuth';
 
 
 const Login = () => {
-  const { handlegetme, loading, handlelogin } = useAuth();
+  const { loading, handlelogin,user } = useAuth();
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const navigate = useNavigate();
- 
+  
+  if(user){
+  navigate("/");
+  return
+  
+ }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
+ 
     try {
 
       const response = await handlelogin(email, password);
-      if (response) {
+      if (response ) {
         console.log("user loggedIn");
         navigate("/")
       }

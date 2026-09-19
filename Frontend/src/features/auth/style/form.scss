@@ -4,27 +4,137 @@
     gap: $gap;
 }
 
-main {
+.auth-page {
     min-height: 100vh;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 2rem 1rem;
 
-    .form-container {
-        @include flex-column(1rem);
-        min-width: 350px;
+    .auth-card {
+        width: min(90vw, 760px);
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        background: rgba(16, 17, 24, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1.6rem;
+        overflow: hidden;
+        box-shadow: 0 25px 42px rgba(0, 0, 0, 0.38);
 
-        form {
-            @include flex-column(1rem);
-          
-            input{
-                border:none;
-                outline: none;
-                padding-inline: 1.2rem;
-                padding-block: 0.5rem;
-                border-radius: 1rem;
+        .brand-block {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255, 86, 124, 0.2), rgba(126, 38, 255, 0.12));
+
+            .brand-tag {
+                display: inline-flex;
+                align-self: flex-start;
+                padding: 0.45rem 0.8rem;
+                border-radius: 999px;
+                font-size: 0.7rem;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                background: rgba(255, 255, 255, 0.08);
+                color: #ffd4dd;
+            }
+
+            h1 {
+                font-size: clamp(2.2rem, 4vw, 4rem);
+                margin-top: 1rem;
+                line-height: 1;
+
+                span {
+                    color: #ff7a99;
+                }
+            }
+
+            p {
+                margin-top: 1rem;
+                color: rgba(255, 255, 255, 0.74);
+                line-height: 1.6;
             }
         }
+
+        .auth-form {
+            @include flex-column(1rem);
+            padding: 2rem 1.5rem;
+            justify-content: center;
+
+            h2 {
+                font-size: clamp(1.5rem, 2vw, 2.4rem);
+                margin-bottom: 0.25rem;
+            }
+
+            input {
+                width: 100%;
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                outline: none;
+                padding: 0.9rem 1rem;
+                border-radius: 0.9rem;
+                background: rgba(255, 255, 255, 0.03);
+                color: #f8f8f8;
+
+                &::placeholder {
+                    color: rgba(255, 255, 255, 0.5);
+                }
+
+                &:focus {
+                    border-color: rgba(255, 123, 160, 0.8);
+                    box-shadow: 0 0 0 3px rgba(255, 123, 160, 0.15);
+                }
+            }
+
+            .auth-switcher {
+                text-align: center;
+                color: rgba(255, 255, 255, 0.72);
+            }
+        }
+    }
+
+    .loading-card {
+        justify-content: center;
+        align-items: center;
+        min-height: 220px;
+        padding: 2rem;
+    }
+
+    .create-post-card {
+        width: min(90vw, 620px);
+        display: block;
+
+        .brand-block.compact {
+            padding-bottom: 1.5rem;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: flex-end;
+        }
+
+        .post-img-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.85rem 1rem;
+            border-radius: 0.9rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            color: #f7d8df;
+        }
+
+        input[type='file'] {
+            display: none;
+        }
+    }
+}
+
+@media (max-width: 700px) {
+    .auth-page .auth-card {
+        grid-template-columns: 1fr;
     }
 }

@@ -1,73 +1,88 @@
-import React, { use, useEffect, useState } from 'react';
-import "../style/form.scss";
+import React, { useEffect, useState } from 'react';
+import '../style/form.scss';
 import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 
-
 const Login = () => {
-  const { loading, handlelogin,user } = useAuth();
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
+  const { loading, handlelogin, user } = useAuth();
+  const [email, setemail] = useState('');
+  const [password, setpassword] = useState('');
   const navigate = useNavigate();
-  
-  if(user){
-  navigate("/");
-  return
-  
- }
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
- 
     try {
-
-      const response = await handlelogin(email, password);
-      if (response ) {
-        console.log("user loggedIn");
-        navigate("/")
+      const response = await handlelogin(email.trim(), password);
+      if (response) {
+        navigate('/');
       }
-
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err);
-      const msg = err.response && err.response.data && err.response.data.message ? err.response.data.message : err.message;
+      const msg = err.response?.data?.message || err.message;
       alert(msg);
-
     }
-  }
+  };
+
   if (loading) {
-    return <main>
-      <h1>Loading data ...</h1>
-    </main>
+    return (
+      <main className="auth-page">
+        <div className="auth-card loading-card">
+          <h1>Loading...</h1>
+        </div>
+      </main>
+    );
   }
+
   return (
-    <main>
-      <div className="form-container">
-        <h1>{loading}</h1>
-        <h1>Login</h1>
-        <form onSubmit={handleSubmit}>
+    <main className="auth-page">
+      <div className="auth-card">
+        <div className="brand-block">
+          <span className="brand-tag">Welcome back</span>
+          <h1>
+            Insta<span>gram</span>
+          </h1>
+          <p>Share moments and reconnect with your community.</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="auth-form">
+          <h2>Login</h2>
+
           <input
             type="email"
-            placeholder="Enter email"
+            placeholder="Email address"
             name="email"
             value={email}
             onChange={(e) => setemail(e.target.value)}
+            autoComplete="email"
           />
 
           <input
             type="password"
-            placeholder="Enter password"
+            placeholder="Password"
             name="password"
             value={password}
             onChange={(e) => setpassword(e.target.value)}
+            autoComplete="current-password"
           />
-          <button className='button primary-button'>Login</button>
-          <p>Don't have an account ? <Link to={"/register"}>Create One.</Link></p>
+
+          <button type="submit" className="button primary-button">
+            Login
+          </button>
+
+          <p className="auth-switcher">
+            Don&apos;t have an account? <Link to="/register">Create one</Link>
+          </p>
         </form>
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

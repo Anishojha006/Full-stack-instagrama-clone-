@@ -3,11 +3,16 @@ import React, { useEffect, useState } from "react";
 const Newrequest = ({
     loading,
     requests,
-    profileImagefromusername
+    profileImagefromusername,
+    handlerequestRejection
 }) => {
 
     const [profileImages, setProfileImages] = useState({});
 
+    const rewjectingRequest = async (requestId) => {
+        const response = await handlerequestRejection(requestId);
+        alert(response);
+    }
 
     useEffect(() => {
 
@@ -58,7 +63,7 @@ const Newrequest = ({
     }, [requests, profileImagefromusername]);
 
 
-   
+
 
 
     if (!requests || requests.length === 0) {
@@ -100,6 +105,10 @@ const Newrequest = ({
 
                         <button
                             className="button primary-button"
+                            onClick={ async ()=>{
+                                await  rewjectingRequest(request._id)
+                            }
+                            }
                         >
                             Reject
                         </button>

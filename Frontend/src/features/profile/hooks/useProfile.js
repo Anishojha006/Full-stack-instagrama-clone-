@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { profileContext } from "../profile.context.jsx";
-import { getNewrequest, getFollowers, getusernameDeatilsfromusername } from "../services/profile.api.js";
+import { getNewrequest, getFollowers, getusernameDeatilsfromusername, rejectrequest } from "../services/profile.api.js";
 
 export const useProfile = () => {
     const context = useContext(profileContext);
@@ -43,10 +43,18 @@ export const useProfile = () => {
             console.log(err.message);
         }
     }
+    const handlerequestRejection = async (requestId) => {
+        const response = await rejectrequest(requestId);
+        setRequests((currentRequests) =>
+            currentRequests.filter((request) => request._id !== requestId)
+        );
+        return response.data;
+    }
     return {
         profileImagefromusername,
         handleNewRequest,
         loading,
-        requests
+        requests,
+        handlerequestRejection
     };
 };

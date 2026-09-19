@@ -18,3 +18,8 @@ export async function getusernameDeatilsfromusername(username) {
     const response = await api.get(`/getDetails/${username}`);
     return response.data.details.profileImage;
 }
+
+export async function rejectrequest(requestId){
+    const response = await api.put(`/rejectRequest/${requestId}`);
+    return  response.data;
+}

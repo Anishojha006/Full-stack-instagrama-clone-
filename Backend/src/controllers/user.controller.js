@@ -134,6 +134,7 @@ async function AcceptFriendRequestControlloer(req, res) {
 }
 
 async function RejectFriendRequestController(req, res) {
+    console.log("hishcsidafh");
     const username = req.user.username;
     const friendRequestId = req.params.requestId;
 

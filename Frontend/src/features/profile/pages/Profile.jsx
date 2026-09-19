@@ -17,7 +17,8 @@ const Profile = () => {
         profileImagefromusername,
         handleNewRequest,
         loading,
-        requests
+        requests,
+        handlerequestRejection
     } = useProfile();
 
 
@@ -82,6 +83,7 @@ const Profile = () => {
                 <div className="requests-conatiner">
 
                     <Newrequest
+                    handlerequestRejection={handlerequestRejection}
                         profileImagefromusername={
                             profileImagefromusername
                         }

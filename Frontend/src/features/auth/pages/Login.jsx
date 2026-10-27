@@ -4,9 +4,10 @@ import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 
 const Login = () => {
-  const { loading, handlelogin, user } = useAuth();
+  const { loading, handlelogin, user, authError } = useAuth();
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,6 +18,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
     try {
       const response = await handlelogin(email.trim(), password);
@@ -24,9 +26,7 @@ const Login = () => {
         navigate('/');
       }
     } catch (err) {
-      console.error(err);
-      const msg = err.response?.data?.message || err.message;
-      alert(msg);
+      setError(err.response?.data?.message || 'Unable to connect. Check that the backend is running and try again.');
     }
   };
 
@@ -52,7 +52,11 @@ const Login = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
-          <h2>Login</h2>
+          <div className="form-heading">
+            <span className="eyebrow">Your community awaits</span>
+            <h2>Welcome back</h2>
+            <p>Sign in to catch up on the moments you love.</p>
+          </div>
 
           <input
             type="email"
@@ -61,6 +65,7 @@ const Login = () => {
             value={email}
             onChange={(e) => setemail(e.target.value)}
             autoComplete="email"
+            required
           />
 
           <input
@@ -70,10 +75,13 @@ const Login = () => {
             value={password}
             onChange={(e) => setpassword(e.target.value)}
             autoComplete="current-password"
+            required
           />
 
+          {(error || authError) && <p className="form-error" role="alert">{error || authError}</p>}
+
           <button type="submit" className="button primary-button">
-            Login
+            Sign in
           </button>
 
           <p className="auth-switcher">

@@ -3,10 +3,11 @@ import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 
 const Register = () => {
-  const { user, loading, handleregister } = useAuth();
+  const { user, loading, handleregister, authError } = useAuth();
   const [email, setemail] = useState('');
   const [username, setusername] = useState('');
   const [password, setpassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,6 +18,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
     try {
       const response = await handleregister(email.trim(), password, username.trim());
@@ -24,9 +26,7 @@ const Register = () => {
         navigate('/');
       }
     } catch (err) {
-      console.error(err);
-      const msg = err.response?.data?.message || err.message;
-      alert(msg);
+      setError(err.response?.data?.message || 'Unable to connect. Check that the backend is running and try again.');
     }
   };
 
@@ -52,7 +52,11 @@ const Register = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
-          <h2>Register</h2>
+          <div className="form-heading">
+            <span className="eyebrow">A little more you</span>
+            <h2>Create your account</h2>
+            <p>Make a space for the moments worth sharing.</p>
+          </div>
 
           <input
             type="text"
@@ -61,6 +65,8 @@ const Register = () => {
             value={username}
             onChange={(e) => setusername(e.target.value)}
             autoComplete="username"
+            required
+            minLength={3}
           />
 
           <input
@@ -70,6 +76,7 @@ const Register = () => {
             value={email}
             onChange={(e) => setemail(e.target.value)}
             autoComplete="email"
+            required
           />
 
           <input
@@ -79,10 +86,14 @@ const Register = () => {
             value={password}
             onChange={(e) => setpassword(e.target.value)}
             autoComplete="new-password"
+            required
+            minLength={6}
           />
 
+          {(error || authError) && <p className="form-error" role="alert">{error || authError}</p>}
+
           <button type="submit" className="button primary-button">
-            Register
+            Create account
           </button>
 
           <p className="auth-switcher">

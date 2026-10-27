@@ -17,6 +17,8 @@ authRouter.post("/register", authController.registerController);
  */
 authRouter.post("/login",authController.loginController);
 
+authRouter.post("/logout", authController.logoutController);
+
 /**
  * @route  api/auth/getme
  * @description used to get currently loggedin users information

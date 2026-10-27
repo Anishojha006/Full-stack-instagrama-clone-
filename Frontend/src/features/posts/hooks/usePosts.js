@@ -5,7 +5,7 @@ import {
     unlikePost
 } from "../services/post.api";
 
-import { useContext, useEffect } from "react";
+import { useCallback, useContext } from "react";
 import { postContext } from "../post.context";
 
 export const usePosts = () => {
@@ -22,15 +22,18 @@ export const usePosts = () => {
         loading,
         post,
         feed,
+        postError,
         setloading,
         setFeed,
-        setPost
+        setPost,
+        setPostError
     } = context;
 
 
-    const handleGetFeed = async () => {
+    const handleGetFeed = useCallback(async () => {
         try {
             setloading(true);
+            setPostError('');
 
             const data = await getFeed();
 
@@ -42,20 +45,17 @@ export const usePosts = () => {
             setFeed(posts);
 
         } catch (error) {
-            console.error(
-                "Error getting feed:",
-                error.response?.data?.message ||
-                error.message
-            );
+            setPostError(error.response?.data?.message || 'Could not load the feed. Please try again.');
         } finally {
             setloading(false);
         }
-    };
+    }, [setFeed, setloading, setPostError]);
 
 
-    const handlecreatePost = async (postImage, caption) => {
+    const handlecreatePost = useCallback(async (postImage, caption) => {
         try {
             setloading(true);
+            setPostError('');
 
             const data = await createPost(
                 postImage,
@@ -66,20 +66,19 @@ export const usePosts = () => {
                 data.post,
                 ...currentFeed
             ]);
+            return data;
 
         } catch (error) {
-            console.error(
-                "Error creating post:",
-                error.response?.data?.message ||
-                error.message
-            );
+            const message = error.response?.data?.message || 'Could not publish your post. Please try again.';
+            setPostError(message);
+            throw new Error(message);
         } finally {
             setloading(false);
         }
-    };
+    }, [setFeed, setloading, setPostError]);
 
 
-    const handlelike = async (postId) => {
+    const handlelike = useCallback(async (postId) => {
         try {
 
             await likePost(postId);
@@ -96,18 +95,13 @@ export const usePosts = () => {
             );
 
         } catch (error) {
-
-            console.error(
-                "Error liking post:",
-                error.response?.data?.message ||
-                error.message
-            );
+            setPostError(error.response?.data?.message || 'Could not like this post. Please try again.');
 
         }
-    };
+    }, [setFeed, setPostError]);
 
 
-    const handleunlike = async (postId) => {
+    const handleunlike = useCallback(async (postId) => {
         try {
 
             await unlikePost(postId);
@@ -124,29 +118,14 @@ export const usePosts = () => {
             );
 
         } catch (error) {
-
-            console.error(
-                "Error unliking post:",
-                error.response?.data?.message ||
-                error.message
-            );
+            setPostError(error.response?.data?.message || 'Could not unlike this post. Please try again.');
 
         }
-    };
+    }, [setFeed, setPostError]);
     
-    const handlegetcurrentuser = async ()=>{
-    setloading(true);
-    let userdata  = await getcurrentUser();
-     
-    }
-
-    useEffect(() => {
-        handleGetFeed();
-    }, []);
-
-
     return {
         loading,
+        postError,
         feed,
         post,
         setPost,

@@ -9,16 +9,23 @@ import Newrequest from "../compoenets/Newrequest";
 
 import { useProfile } from "../hooks/useProfile.js";
 import { useAuth } from "../../auth/hooks/useAuth.js";
+import Navbar from "../../shared/componenet/Navbar.jsx";
 
 
 const Profile = () => {
 
     const {
         profileImagefromusername,
-        handleNewRequest,
+        handleLoadProfile,
         loading,
+        error,
         requests,
-        handlerequestRejection
+        followers,
+        followings,
+        handlerequestRejection,
+        handleRequestAcceptance,
+        handleFollow,
+        handleUnfollow
     } = useProfile();
 
 
@@ -29,17 +36,16 @@ const Profile = () => {
 
 
     useEffect(() => {
-
-        handleNewRequest();
-
-    }, []);
+        handleLoadProfile();
+    }, [handleLoadProfile]);
 
 
     if (authLoading) {
 
         return (
-            <main>
-                <h1>Loading...</h1>
+            <main className="page-loading">
+                <span className="loading-spinner" aria-hidden="true" />
+                <p>Loading your profile...</p>
             </main>
         );
 
@@ -49,8 +55,8 @@ const Profile = () => {
     if (!user) {
 
         return (
-            <main>
-                <h1>Please login</h1>
+            <main className="page-loading">
+                <h1>Please sign in to view your profile.</h1>
             </main>
         );
 
@@ -59,46 +65,33 @@ const Profile = () => {
 
     return (
 
-        <>
-
-            <Userinfo user={user} />
-
-
-            <div className="follower-following-list">
-
-                <Followers />
-
-                <Followings />
-
+        <main className="profile-page">
+            <Navbar />
+            {error && <p className="notice error-notice" role="alert">{error}</p>}
+            <Userinfo user={user} followers={followers} followings={followings} />
+            <div className="profile-lists">
+                <Followers followers={followers} followings={followings} onFollow={handleFollow} />
+                <Followings followings={followings} onUnfollow={handleUnfollow} />
             </div>
-
-
-            <div className="request-parent">
-
-                <h1>
-                    New follow request
-                </h1>
-
-
-                <div className="requests-conatiner">
-
+            <section className="request-parent">
+                <div className="section-heading">
+                    <div>
+                        <span className="eyebrow">Your community</span>
+                        <h2>Follow requests</h2>
+                    </div>
+                    <span className="feed-count">{requests.length} pending</span>
+                </div>
+                <div className="requests-container">
                     <Newrequest
-                    handlerequestRejection={handlerequestRejection}
-                        profileImagefromusername={
-                            profileImagefromusername
-                        }
+                        handlerequestRejection={handlerequestRejection}
+                        handleRequestAcceptance={handleRequestAcceptance}
+                        profileImagefromusername={profileImagefromusername}
                         requests={requests}
                         loading={loading}
                     />
-
                 </div>
-
-            </div>
-
-
-            <div className="others"></div>
-
-        </>
+            </section>
+        </main>
 
     );
 

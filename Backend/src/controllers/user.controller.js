@@ -48,6 +48,9 @@ async function followUserController(req, res) {
     }
     catch (err) {
         console.log(err.message);
+        return res.status(500).json({
+            message: "Unable to send follow request"
+        });
     }
 }
 
@@ -185,6 +188,19 @@ async function getfollower(req, res) {
     })
 }
 
+async function getfollowing(req, res) {
+    const username = req.user.username;
+    const followings = await followModel.find({
+        follower: username,
+        Status: "accepted"
+    });
+
+    return res.status(200).json({
+        message: "List of all followings",
+        response: followings
+    });
+}
+
 async function getProfileImagefromUsername(req, res) {
     try {
 
@@ -201,10 +217,13 @@ async function getProfileImagefromUsername(req, res) {
     }
     catch (err) {
         console.log(err.message);
+        return res.status(500).json({
+            message: "Unable to load user details"
+        });
     }
 
 
 }
 
 
-module.exports = { followUserController, unfollowsUserController, GetfriendRequestController, AcceptFriendRequestControlloer, RejectFriendRequestController, getfollower,getProfileImagefromUsername };
+module.exports = { followUserController, unfollowsUserController, GetfriendRequestController, AcceptFriendRequestControlloer, RejectFriendRequestController, getfollower, getfollowing, getProfileImagefromUsername };

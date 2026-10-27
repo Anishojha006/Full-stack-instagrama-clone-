@@ -4,6 +4,7 @@ import Register from './features/auth/pages/Register';
 import Feed from './features/posts/pages/Feed';
 import CreatePost from './features/posts/pages/CreatePost';
 import Profile from './features/profile/pages/Profile';
+import ProtectedRoute from './shared/ProtectedRoute.jsx';
 
 export  const router = createBrowserRouter([
     {
@@ -16,15 +17,15 @@ export  const router = createBrowserRouter([
     },{
 
         path:'/',
-        element:<Feed/>
+        element:<ProtectedRoute><Feed/></ProtectedRoute>
     },{
 
         path:'/create-post',
-        element:<CreatePost/>
+        element:<ProtectedRoute><CreatePost/></ProtectedRoute>
     },
     {
         path:'/profile',
-        element:<Profile/>
+        element:<ProtectedRoute><Profile/></ProtectedRoute>
     }
 
 ]);

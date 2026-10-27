@@ -1,28 +1,21 @@
-// this file isused to call all the apis of auth
-import axios from 'axios'
-
-const api = axios.create({
-  baseURL: "http://localhost:3000/api/auth",
-  withCredentials: true
-})
+import api from '../../../shared/api.js';
 
 export async function register(username, email, password) {
-  const response = await api.post("/register",{
-    username,email,password
-  });
-
+  const response = await api.post('/auth/register', { username, email, password });
   return response.data;
 }
 
 export async function login(email, password) {
-    const response = await api.post("/login", {
-        email, password
-    });
-    return response.data;
+  const response = await api.post('/auth/login', { email, password });
+  return response.data;
 }
 
-export async function getme(){
-  const response = await api.get("/getme");
-    return response.data;
+export async function getme() {
+  const response = await api.get('/auth/getme');
+  return response.data;
+}
 
+export async function logout() {
+  const response = await api.post('/auth/logout');
+  return response.data;
 }

@@ -2,7 +2,8 @@ import { useContext } from "react";
 import { AuthContext } from "../auth.context";
 import {
     login,
-    register
+    register,
+    logout
 } from "../services/auth.api.js";
 
 
@@ -21,7 +22,8 @@ export const useAuth = () => {
         user,
         setuser,
         loading,
-        setloading
+        setloading,
+        authError
     } = context;
 
 
@@ -30,20 +32,9 @@ export const useAuth = () => {
         setloading(true);
 
         try {
-
-            const response = await login(
-                email,
-                password
-            );
-
+            const response = await login(email, password);
             setuser(response.user);
-
             return response;
-
-        } catch (error) {
-
-            throw error;
-
         } finally {
 
             setloading(false);
@@ -62,21 +53,9 @@ export const useAuth = () => {
         setloading(true);
 
         try {
-
-            const response = await register(
-                username,
-                email,
-                password
-            );
-
+            const response = await register(username, email, password);
             setuser(response.user);
-
             return response;
-
-        } catch (error) {
-
-            throw error;
-
         } finally {
 
             setloading(false);
@@ -85,12 +64,24 @@ export const useAuth = () => {
 
     };
 
+    const handlelogout = async () => {
+        setloading(true);
+        try {
+            await logout();
+            setuser(null);
+        } finally {
+            setloading(false);
+        }
+    };
+
 
     return {
         user,
         loading,
+        authError,
         handlelogin,
-        handleregister
+        handleregister,
+        handlelogout
     };
 
 };

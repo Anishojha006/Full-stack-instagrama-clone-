@@ -4,15 +4,28 @@ const Newrequest = ({
     loading,
     requests,
     profileImagefromusername,
-    handlerequestRejection
+    handlerequestRejection,
+    handleRequestAcceptance
 }) => {
-
     const [profileImages, setProfileImages] = useState({});
+    const [activeRequest, setActiveRequest] = useState('');
+    const [error, setError] = useState('');
 
-    const rewjectingRequest = async (requestId) => {
-        const response = await handlerequestRejection(requestId);
-        alert(response);
-    }
+    const respondToRequest = async (requestId, action) => {
+        setActiveRequest(requestId);
+        setError('');
+        try {
+            if (action === 'accept') {
+                await handleRequestAcceptance(requestId);
+            } else {
+                await handlerequestRejection(requestId);
+            }
+        } catch (err) {
+            setError(err.response?.data?.message || 'Could not update this follow request.');
+        } finally {
+            setActiveRequest('');
+        }
+    };
 
     useEffect(() => {
 
@@ -47,10 +60,8 @@ const Newrequest = ({
 
                 setProfileImages(images);
 
-            } catch (err) {
-
-                console.log(err.message);
-
+            } catch {
+                setError('Could not load profile images for pending requests.');
             }
 
         };
@@ -66,12 +77,14 @@ const Newrequest = ({
 
 
 
+    if (loading && requests.length === 0) {
+        return <p className="list-empty">Loading follow requests...</p>;
+    }
+
     if (!requests || requests.length === 0) {
 
         return (
-            <main>
-                <h1>No new requests</h1>
-            </main>
+            <p className="list-empty">You’re all caught up. New follow requests will appear here.</p>
         );
 
     }
@@ -79,6 +92,7 @@ const Newrequest = ({
 
     return (
         <>
+            {error && <p className="notice error-notice" role="alert">{error}</p>}
             {requests.map((request) => (
 
                 <div
@@ -87,36 +101,33 @@ const Newrequest = ({
                 >
 
                     <div className="img-wrapper">
-
-                        <img
-                            src={profileImages[request.follower]}
-                            alt={`${request.follower} profile`}
-                        />
-
+                        {profileImages[request.follower]
+                            ? <img src={profileImages[request.follower]} alt={`${request.follower} profile`} />
+                            : <span className="avatar-fallback">{request.follower?.charAt(0)?.toUpperCase() || '?'}</span>}
                     </div>
 
 
-                    <h1>
+                    <h3>
                         {request.follower}
-                    </h1>
+                    </h3>
 
 
                     <div className="accept-reject-buttons">
 
                         <button
-                            className="button primary-button"
-                            onClick={ async ()=>{
-                                await  rewjectingRequest(request._id)
-                            }
-                            }
+                            className="button secondary-button"
+                            disabled={activeRequest === request._id}
+                            onClick={() => respondToRequest(request._id, 'reject')}
                         >
                             Reject
                         </button>
 
                         <button
-                            className="button secondary-button"
+                            className="button primary-button"
+                            disabled={activeRequest === request._id}
+                            onClick={() => respondToRequest(request._id, 'accept')}
                         >
-                            Accept
+                            {activeRequest === request._id ? 'Saving...' : 'Accept'}
                         </button>
 
                     </div>

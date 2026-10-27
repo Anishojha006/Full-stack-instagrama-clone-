@@ -92,4 +92,11 @@ async function getmeController(req,res){
     })
 }
 
-module.exports ={ registerController,loginController,getmeController}
+function logoutController(req, res) {
+    res.clearCookie("token");
+    return res.status(200).json({
+        message: "Logged out successfully"
+    });
+}
+
+module.exports ={ registerController,loginController,getmeController,logoutController}

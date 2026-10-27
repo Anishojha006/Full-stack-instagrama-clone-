@@ -49,6 +49,7 @@ userRouter.put("/rejectRequest/:requestId",identifyingUser,userContrololr.Reject
  */
 
 userRouter.get("/getfollower",identifyingUser,userContrololr.getfollower);
+userRouter.get("/getfollowing",identifyingUser,userContrololr.getfollowing);
 /**
  * @route GET
  * @description used to get the details of the user with the help of it's username
@@ -57,4 +58,3 @@ userRouter.get("/getfollower",identifyingUser,userContrololr.getfollower);
 userRouter.get("/getDetails/:username",identifyingUser,userContrololr.getProfileImagefromUsername);
 
 module.exports = userRouter;
-
